@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ping/features/Messages/data/datasources/firebase_service.dart';
+import 'package:ping/features/Messages/data/datasources/firebase_message_service.dart';
 import 'package:ping/features/Messages/data/models/message_model.dart';
 part 'messages_state.dart';
 
