@@ -17,9 +17,10 @@ class AppButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: buttoncolor,
+        minimumSize: const Size(double.infinity, 50),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
-            Radius.circular(20),
+            Radius.circular(16),
           ),
         ),
       ),
