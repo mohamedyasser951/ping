@@ -17,4 +17,16 @@ class AuthCubit extends Cubit<AuthState> {
           authStatus: AuthStatus.error, errorMessage: error.toString()));
     });
   }
+
+  void signup(
+      {required String name, required String email, required String password}) {
+    emit(state.copyWith(authStatus: AuthStatus.loading));
+
+    authRepo.signup(name: name, email: email, password: password).then((user) {
+      emit(state.copyWith(authStatus: AuthStatus.success, user: null));
+    }).catchError((error) {
+      emit(state.copyWith(
+          authStatus: AuthStatus.error, errorMessage: error.toString()));
+    });
+  }
 }
