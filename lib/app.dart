@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ping/features/auth/presentation/pages/login_page.dart';
+import 'package:ping/features/Chats/presentation/pages/chats_page.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -11,7 +11,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xff2865DC),
       ),
-      home: LoginScreen(),
+      home: ChatsScreen(),
     );
   }
 }

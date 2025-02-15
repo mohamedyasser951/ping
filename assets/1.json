@@ -1,0 +1,47 @@
+{
+    "users": {
+      "user1": {
+        "id": "user1",
+        "name": "John Doe",
+        "email": "johndoe@example.com",
+        "profileImage": "https://example.com/john.jpg",
+        "status": "online",
+        "lastSeen": "2025-02-12T14:30:00Z"
+      },
+      "user2": {
+        "id": "user2",
+        "name": "Alice Smith",
+        "email": "alicesmith@example.com",
+        "profileImage": "https://example.com/alice.jpg",
+        "status": "offline",
+        "lastSeen": "2025-02-11T10:00:00Z"
+      }
+    },
+    "chats": {
+      "chat1": {
+        "participants": {
+          "user1": { "unreadCount": 2 },
+          "user2": { "unreadCount": 0 }
+        },
+        "messages": {
+          "msg1": {
+            "sendId": "user1",
+            "receiverId": "user2",
+            "text": "Hey Alice!",
+            "messageType": "text",
+            "time": "2025-02-12T14:31:00Z",
+            "isRead": false
+          },
+          "msg2": {
+            "sendId": "user2",
+            "receiverId": "user1",
+            "text": "Hey John, how's it going?",
+            "messageType": "text",
+            "time": "2025-02-12T14:32:00Z",
+            "isRead": true
+          }
+        }
+      }
+    }
+  }
+  
