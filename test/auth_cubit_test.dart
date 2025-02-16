@@ -25,13 +25,17 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'emits Loading and Success when login is successful',
         build: () => cubit,
-        setUp: () => when(
-                () => mockAuthRepo.login(email: 'email', password: 'password'))
-            .thenAnswer((_) async => UserModel(name: 'name', email: 'email')),
+        setUp: () =>
+            when(() => mockAuthRepo.login(email: 'email', password: 'password'))
+                .thenAnswer((_) async => UserModel(
+                    name: 'name', email: 'email', uId: 'uId', phone: 'phone')),
         act: (cubit) => cubit.login(email: 'email', password: 'password'),
         expect: () => [
           AuthState(authStatus: AuthStatus.loading),
-          AuthState(authStatus: AuthStatus.success, user: null),
+          AuthState(
+              authStatus: AuthStatus.loggedIn,
+              user: UserModel(
+                  name: 'name', email: 'email', uId: 'uId', phone: 'phone')),
         ],
       );
 
@@ -57,12 +61,16 @@ void main() {
         build: () => cubit,
         setUp: () => when(() => mockAuthRepo.signup(
                 name: 'name', email: 'email', password: 'password'))
-            .thenAnswer((_) async => UserModel(name: 'name', email: 'email')),
+            .thenAnswer((_) async => UserModel(
+                name: 'name', email: 'email', uId: 'uId', phone: 'phone')),
         act: (cubit) =>
             cubit.signup(name: 'name', email: 'email', password: 'password'),
         expect: () => [
           AuthState(authStatus: AuthStatus.loading),
-          AuthState(authStatus: AuthStatus.success, user: null),
+          AuthState(
+              authStatus: AuthStatus.loggedIn,
+              user: UserModel(
+                  name: 'name', email: 'email', uId: 'uId', phone: 'phone')),
         ],
       );
 

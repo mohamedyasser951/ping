@@ -1,6 +1,14 @@
 part of 'auth_cubit.dart';
 
-enum AuthStatus { initial, loading, success, error }
+enum AuthStatus { initial, loading, loggedIn, loggedOut, error }
+
+extension AuthStatusX on AuthStatus {
+  bool get isInitial => this == AuthStatus.initial;
+  bool get isLoading => this == AuthStatus.loading;
+  bool get isLoggedOut => this == AuthStatus.loggedOut;
+  bool get isLoggedIn => this == AuthStatus.loggedIn;
+  bool get isError => this == AuthStatus.error;
+}
 
 class AuthState {
   final AuthStatus authStatus;

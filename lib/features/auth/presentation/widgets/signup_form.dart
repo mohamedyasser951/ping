@@ -4,21 +4,24 @@ import 'package:ping/core/shared/widgets/app_button.dart';
 import 'package:ping/core/shared/widgets/app_text_form_field.dart';
 import 'package:ping/features/auth/presentation/cubit/auth_cubit.dart';
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _SignUpFormState extends State<SignUpForm> {
+  late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  // late TextEditingController _phoneController;
   late GlobalKey<FormState> _formKey;
 
   @override
   void initState() {
     _emailController = TextEditingController();
+    _nameController = TextEditingController();
     _passwordController = TextEditingController();
     _formKey = GlobalKey<FormState>();
     super.initState();
@@ -26,9 +29,11 @@ class _LoginFormState extends State<LoginForm> {
 
   void trySubmit() {
     if (_formKey.currentState!.validate()) {
-      context.read<AuthCubit>().login(
+      context.read<AuthCubit>().signup(
+          name: _nameController.text.trim(),
           email: _emailController.text.trim(),
           password: _passwordController.text.trim());
+
       FocusScope.of(context).unfocus();
     }
   }
@@ -42,6 +47,18 @@ class _LoginFormState extends State<LoginForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppTextFileld(
+            controller: _nameController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Name is required";
+              }
+              return null;
+            },
+            textInputType: TextInputType.name,
+            prefixIcon: Icons.person,
+            hint: "Name",
+          ),
+          AppTextFileld(
             controller: _emailController,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -53,6 +70,20 @@ class _LoginFormState extends State<LoginForm> {
             prefixIcon: Icons.email_outlined,
             hint: "Email",
           ),
+
+          // AppTextFileld(
+          //   controller: _phoneController,
+          //   validator: (value) {
+          //     if (value == null || value.isEmpty) {
+          //       return "Phone is required";
+          //     }
+          //     return null;
+          //   },
+          //   textInputType: TextInputType.phone,
+          //   prefixIcon: Icons.phone,
+          //   hint: "Phone",
+          // ),
+
           AppTextFileld(
               controller: _passwordController,
               hint: "Password",
@@ -77,7 +108,7 @@ class _LoginFormState extends State<LoginForm> {
                         color: Colors.white,
                       )
                     : const Text(
-                        "Login",
+                        "Sign Up",
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
               );
