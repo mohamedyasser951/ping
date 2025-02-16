@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ping/core/di/service_locator.dart';
 import 'package:ping/features/Chats/presentation/cubit/chats_cubit.dart';
 import 'package:ping/features/Chats/presentation/widgets/chat_item.dart';
 
@@ -32,7 +31,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
         ],
       ),
       body: BlocProvider(
-        create: (context) => getIt<ChatsCubit>()..getChats("0"),
+        create: (context) => ChatsCubit(),
         child: BlocBuilder<ChatsCubit, ChatsState>(
           builder: (context, state) {
             if (state is ChatsLoading) {
