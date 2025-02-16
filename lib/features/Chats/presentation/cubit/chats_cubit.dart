@@ -4,8 +4,8 @@ import 'package:ping/features/Chats/data/repositories/chat_repo_implm.dart';
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
-  FirebaseChatRepositoryImplem chatsRepo;
-  ChatsCubit({required this.chatsRepo}) : super(ChatsInitial());
+  FirebaseChatRepositoryImplem chatsRepo = FirebaseChatRepositoryImplem();
+  ChatsCubit() : super(ChatsInitial());
 
   Future<void> getChats(String userId) async {
     emit(ChatsLoading());

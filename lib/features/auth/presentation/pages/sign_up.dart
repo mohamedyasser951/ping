@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ping/features/auth/presentation/pages/login_page.dart';
+import 'package:ping/features/auth/presentation/widgets/auth_bloc_listener.dart';
 import 'package:ping/features/auth/presentation/widgets/signup_form.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -18,6 +19,7 @@ class SignUpScreen extends StatelessWidget {
                 child: Column(
                   spacing: 20,
                   children: [
+                    AuthBlocListener(),
                     Image.asset(
                       "assets/images/splash-logo.png",
                       width: MediaQuery.of(context).size.width * 0.6,
