@@ -6,19 +6,15 @@ abstract class CacheService {
 }
 
 class CacheServiceImpl implements CacheService {
-  final SharedPreferences prefs;
-
-  CacheServiceImpl({
-    required this.prefs,
-  });
-
   @override
   Future<String?> getString(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(key);
   }
 
   @override
-  Future<void> setString(String key, String value) {
+  Future<bool> setString(String key, String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(key, value);
   }
 }

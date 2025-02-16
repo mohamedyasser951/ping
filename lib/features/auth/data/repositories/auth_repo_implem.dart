@@ -36,7 +36,7 @@ class AuthRepoImplem implements AuthRepo {
         name: name, email: email, password: password);
 
     authLocalDataSource.saveUser(userModel);
-    authRemoteDatabaseSource.saveUser(userModel);
+    await authRemoteDatabaseSource.saveUser(userModel);
 
     return userModel;
   }
