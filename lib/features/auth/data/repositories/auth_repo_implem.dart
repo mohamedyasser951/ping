@@ -1,14 +1,18 @@
 import 'package:ping/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:ping/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:ping/features/auth/data/datasources/auth_remote_database_source.dart';
 import 'package:ping/features/auth/data/models/user_model.dart';
 import 'package:ping/features/auth/data/repositories/auth_repo.dart';
 
 class AuthRepoImplem implements AuthRepo {
   final AuthRemoteDataSource authRemoteDataSource;
   final AuthLocalDataSource authLocalDataSource;
+  final AuthRemoteDatabaseSource authRemoteDatabaseSource;
+
   AuthRepoImplem({
     required this.authRemoteDataSource,
     required this.authLocalDataSource,
+    required this.authRemoteDatabaseSource,
   });
 
   @override
@@ -18,8 +22,9 @@ class AuthRepoImplem implements AuthRepo {
         await authRemoteDataSource.login(email: email, password: password);
 
     authLocalDataSource.saveUser(userCredential);
+    final user = await authRemoteDatabaseSource.getUser(userCredential.uId!);
 
-    return userCredential;
+    return user;
   }
 
   @override
@@ -31,6 +36,7 @@ class AuthRepoImplem implements AuthRepo {
         name: name, email: email, password: password);
 
     authLocalDataSource.saveUser(userModel);
+    authRemoteDatabaseSource.saveUser(userModel);
 
     return userModel;
   }
