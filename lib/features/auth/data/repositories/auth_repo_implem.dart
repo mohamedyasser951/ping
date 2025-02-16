@@ -1,24 +1,47 @@
+import 'package:ping/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:ping/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:ping/features/auth/data/models/user_model.dart';
 import 'package:ping/features/auth/data/repositories/auth_repo.dart';
 
 class AuthRepoImplem implements AuthRepo {
   final AuthRemoteDataSource authRemoteDataSource;
-  AuthRepoImplem({required this.authRemoteDataSource});
+  final AuthLocalDataSource authLocalDataSource;
+  AuthRepoImplem({
+    required this.authRemoteDataSource,
+    required this.authLocalDataSource,
+  });
 
   @override
-  Future<void> login({required String email, required String password}) {
-    return authRemoteDataSource.login(email: email, password: password);
+  Future<UserModel> login(
+      {required String email, required String password}) async {
+    final userCredential =
+        await authRemoteDataSource.login(email: email, password: password);
+
+    authLocalDataSource.saveUser(userCredential);
+
+    return userCredential;
   }
 
   @override
-  Future<void> signup(
-      {required String name, required String email, required String password}) {
-    return authRemoteDataSource.signup(
+  Future<UserModel> signup(
+      {required String name,
+      required String email,
+      required String password}) async {
+    final userModel = await authRemoteDataSource.signup(
         name: name, email: email, password: password);
+
+    authLocalDataSource.saveUser(userModel);
+
+    return userModel;
   }
 
   @override
   Future<void> signOut() {
     return authRemoteDataSource.signout();
+  }
+
+  @override
+  Future<UserModel?> getUser() {
+    return authLocalDataSource.getUser();
   }
 }

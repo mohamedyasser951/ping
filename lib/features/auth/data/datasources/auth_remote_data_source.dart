@@ -1,3 +1,4 @@
+import 'package:ping/core/services/remote_auth_services.dart';
 import 'package:ping/features/auth/data/models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -10,19 +11,25 @@ abstract class AuthRemoteDataSource {
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  @override
-  Future<UserModel> login({required String email, required String password}) {
-    throw UnimplementedError();
-  }
+  RemoteAuthServices remoteAuthServices;
+  AuthRemoteDataSourceImpl({
+    required this.remoteAuthServices,
+  });
 
   @override
-  Future<void> signout() {
-    throw UnimplementedError();
+  Future<UserModel> login({required String email, required String password}) {
+    return remoteAuthServices.login(email: email, password: password);
   }
 
   @override
   Future<UserModel> signup(
       {required String name, required String email, required String password}) {
-    throw UnimplementedError();
+    return remoteAuthServices.signup(
+        name: name, email: email, password: password);
+  }
+
+  @override
+  Future<void> signout() {
+    return remoteAuthServices.signOut();
   }
 }
