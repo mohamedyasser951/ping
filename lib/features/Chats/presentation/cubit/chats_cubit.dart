@@ -5,3 +5,4 @@ part 'chats_state.dart';
 class ChatsCubit extends Cubit<ChatsState> {
   ChatsCubit() : super(ChatsInitial());
 }
+
