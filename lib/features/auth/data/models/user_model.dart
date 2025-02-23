@@ -39,9 +39,14 @@ class UserModel {
 
   factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
 
+  String toJson() => json.encode(toMap());
+
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source));
+
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email,)';
+    return 'UserModel(name: $name, email: $email,   phone: $phone, uId: $uId)';
   }
 
   @override
