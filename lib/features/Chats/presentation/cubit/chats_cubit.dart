@@ -16,3 +16,4 @@ class ChatsCubit extends Cubit<ChatsState> {
     );
   }
 }
+
