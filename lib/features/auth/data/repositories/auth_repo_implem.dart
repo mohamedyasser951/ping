@@ -42,8 +42,11 @@ class AuthRepoImplem implements AuthRepo {
   }
 
   @override
-  Future<void> signOut() {
-    return authRemoteDataSource.signout();
+  Future<void> signOut() async {
+    Future.wait([
+      authRemoteDataSource.signout(),
+      authLocalDataSource.deleteUser(),
+    ]);
   }
 
   @override

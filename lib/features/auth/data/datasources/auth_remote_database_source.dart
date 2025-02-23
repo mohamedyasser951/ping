@@ -13,12 +13,12 @@ class AuthRemoteDatabaseSourceImpl implements AuthRemoteDatabaseSource {
   @override
   Future<UserModel> getUser(String userId) {
     return remoteDatabaseService.get(
-        '/users/$userId', (data) => UserModel.fromJson(data));
+        '/users/$userId', (data) => UserModel.fromMap(data));
   }
 
   @override
   Future<void> saveUser(UserModel user) {
     return remoteDatabaseService.set(
-        '/users/${user.uId}', user, (user) => user.toJson());
+        '/users/${user.uId}', user, (user) => user.toMap());
   }
 }

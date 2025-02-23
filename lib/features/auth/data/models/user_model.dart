@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class UserModel {
   final String? uId;
 
@@ -14,7 +16,7 @@ class UserModel {
     // required this.image
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
+  factory UserModel.fromMap(Map<String, dynamic> json) {
     return UserModel(
       name: json['name'],
       email: json['email'],
@@ -24,7 +26,7 @@ class UserModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'name': name,
       'email': email,
@@ -34,9 +36,14 @@ class UserModel {
     };
   }
 
+  String toJson() => json.encode(toMap());
+
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source));
+
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email,)';
+    return 'UserModel(name: $name, email: $email,   phone: $phone, uId: $uId)';
   }
 
   @override

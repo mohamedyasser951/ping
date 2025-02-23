@@ -32,7 +32,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
         ],
       ),
       body: BlocProvider(
-        create: (context) => getIt<ChatsCubit>()..getChats("0"),
+        create: (context) => getIt<ChatsCubit>(),
         child: BlocBuilder<ChatsCubit, ChatsState>(
           builder: (context, state) {
             if (state is ChatsLoading) {

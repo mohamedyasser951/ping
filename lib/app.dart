@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ping/core/di/service_locator.dart';
-import 'package:ping/features/Chats/presentation/pages/chats_page.dart';
 import 'package:ping/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ping/features/auth/presentation/pages/login_page.dart';
 
