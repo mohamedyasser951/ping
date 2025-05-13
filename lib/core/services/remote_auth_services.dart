@@ -41,8 +41,8 @@ class RemoteAuthServicesImpl implements RemoteAuthServices {
     if (credential.user == null) {
       throw Exception('Invalid user');
     }
-    await credential.user!.updateDisplayName(name);
-    await credential.user!.reload();
+    await firebaseAuth.currentUser!.updateDisplayName(name);
+    firebaseAuth.currentUser!.reload();
 
     FirebaseAuthUserAdapter firebaseAuthUserAdapter = FirebaseAuthUserAdapter();
     return firebaseAuthUserAdapter.adapt(firebaseAuth.currentUser!);
@@ -58,7 +58,7 @@ class RemoteAuthServicesImpl implements RemoteAuthServices {
 class FirebaseAuthUserAdapter {
   UserModel adapt(User user) {
     return UserModel(
-        name: user.displayName ?? 'name',
+        name: user.displayName!,
         email: user.email,
         phone: user.phoneNumber,
         uId: user.uid);
