@@ -46,6 +46,7 @@ class RemoteAuthServicesImpl implements RemoteAuthServices {
 
     FirebaseAuthUserAdapter firebaseAuthUserAdapter = FirebaseAuthUserAdapter();
     return firebaseAuthUserAdapter.adapt(firebaseAuth.currentUser!);
+    return firebaseAuthUserAdapter.adapt(firebaseAuth.currentUser!);
   }
 
   @override
