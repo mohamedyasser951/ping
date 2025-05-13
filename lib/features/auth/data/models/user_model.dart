@@ -35,6 +35,9 @@ class UserModel {
       // 'image': image,
     };
   }
+    String toJson() => json.encode(toMap());
+
+  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
 
   String toJson() => json.encode(toMap());
 

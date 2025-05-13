@@ -19,7 +19,6 @@ GetIt getIt = GetIt.instance;
 void setupServiceLocator() {
   //CUBITS
   getIt.registerFactory<AuthCubit>(() => AuthCubit(authRepo: getIt()));
-  getIt.registerFactory<ChatsCubit>(() => ChatsCubit(chatsRepo: getIt()),);
   //REPOSITORIES
   getIt.registerLazySingleton<AuthRepo>(() => AuthRepoImplem(
       authRemoteDataSource: getIt(),

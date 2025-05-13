@@ -11,8 +11,6 @@ class AuthCubit extends Cubit<AuthState> {
 
   void init() async {
     final user = await authRepo.getUser();
-    log("init");
-    log("user:$user");
     if (user == null) {
       emit(state.copyWith(authStatus: AuthStatus.loggedOut));
     } else {

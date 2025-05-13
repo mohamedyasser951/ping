@@ -36,7 +36,7 @@ class AuthRepoImplem implements AuthRepo {
         name: name, email: email, password: password);
 
     authLocalDataSource.saveUser(userModel);
-    await authRemoteDatabaseSource.saveUser(userModel);
+    authRemoteDatabaseSource.saveUser(userModel);
 
     return userModel;
   }
@@ -50,7 +50,7 @@ class AuthRepoImplem implements AuthRepo {
   }
 
   @override
-  Future<UserModel?> getUser() {
-    return authLocalDataSource.getUser();
+  Future<UserModel?> getUser()async {
+    return await authLocalDataSource.getUser();
   }
 }
