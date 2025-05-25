@@ -3,18 +3,14 @@ import 'package:ping/features/auth/data/models/user_model.dart';
 
 abstract class RemoteAuthServices {
   Future<UserModel> login({required String email, required String password});
-
   Future<UserModel> signup(
       {required String name, required String email, required String password});
-
   Future<void> signOut();
 }
 
 class RemoteAuthServicesImpl implements RemoteAuthServices {
   FirebaseAuth firebaseAuth;
-
   RemoteAuthServicesImpl({required this.firebaseAuth});
-
   @override
   Future<UserModel> login(
       {required String email, required String password}) async {
@@ -32,26 +28,23 @@ class RemoteAuthServicesImpl implements RemoteAuthServices {
       {required String name,
       required String email,
       required String password}) async {
-    final credential = await firebaseAuth.createUserWithEmailAndPassword(
+    final firebaseUser = await firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
-    await firebaseAuth.currentUser!.updateDisplayName(name);
-    await firebaseAuth.currentUser!.reload();
-    if (credential.user == null) {
+    await firebaseUser.user!.updateDisplayName(name);
+    await firebaseUser.user!.reload();
+
+    if (firebaseUser.user == null) {
       throw Exception('Invalid user');
     }
-    await firebaseAuth.currentUser!.updateDisplayName(name);
-    firebaseAuth.currentUser!.reload();
-
-    FirebaseAuthUserAdapter firebaseAuthUserAdapter = FirebaseAuthUserAdapter();
-    return firebaseAuthUserAdapter.adapt(firebaseAuth.currentUser!);
+    final firebaseAuthUserAdapter = FirebaseAuthUserAdapter();
     return firebaseAuthUserAdapter.adapt(firebaseAuth.currentUser!);
   }
 
   @override
   Future<void> signOut() async {
-    return await firebaseAuth.signOut();
+    await firebaseAuth.signOut();
   }
 }
 

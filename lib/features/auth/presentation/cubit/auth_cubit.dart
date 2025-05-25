@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ping/features/auth/data/models/user_model.dart';
 import 'package:ping/features/auth/data/repositories/auth_repo.dart';

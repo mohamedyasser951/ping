@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:ping/core/services/cache_service.dart';
 import 'package:ping/features/auth/data/models/user_model.dart';
 
@@ -26,11 +24,15 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<UserModel?> getUser() async {
     final userJson = await cacheService.getString(userCacheKey);
-    // log("userJson:$userJson");
     if (userJson == null) {
       return null;
     }
-    return UserModel.fromJson(Map<String, dynamic>.from(jsonDecode(userJson)));
+    return UserModel.fromJson(userJson);
+  }
+  
+  @override
+  Future<void> deleteUser() {
+    return cacheService.remove(userCacheKey);
   }
 }
 

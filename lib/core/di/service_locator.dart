@@ -4,14 +4,11 @@ import 'package:get_it/get_it.dart';
 import 'package:ping/core/services/cache_service.dart';
 import 'package:ping/core/services/remote_auth_services.dart';
 import 'package:ping/core/services/remote_database_service.dart';
-import 'package:ping/features/Chats/data/repositories/chat_repo_implm.dart';
-import 'package:ping/features/Chats/data/repositories/chats_repo.dart';
-import 'package:ping/features/Chats/presentation/cubit/chats_cubit.dart';
 import 'package:ping/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:ping/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:ping/features/auth/data/datasources/auth_remote_database_source.dart';
 import 'package:ping/features/auth/data/repositories/auth_repo.dart';
-import 'package:ping/features/auth/data/repositories/auth_repo_implem.dart';
+import 'package:ping/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:ping/features/auth/presentation/cubit/auth_cubit.dart';
 
 GetIt getIt = GetIt.instance;
@@ -25,7 +22,6 @@ void setupServiceLocator() {
       authLocalDataSource: getIt(),
       authRemoteDatabaseSource: getIt()));
 
-    getIt.registerLazySingleton<ChatsRepo>(() => FirebaseChatRepositoryImplem(),);
   //DATASOURCES
   getIt.registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImpl(remoteAuthServices: getIt()));
