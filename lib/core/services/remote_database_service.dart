@@ -6,33 +6,152 @@ abstract class RemoteDatabaseService {
     T Function(Map<String, dynamic>) fromMap,
   );
   Future<void> set<T>(
-      String path, T data, Map<String, dynamic> Function(T) toMap);
-
+    String path,
+    T data,
+    Map<String, dynamic> Function(T) toMap,
+  );
   Future<void> delete(String path);
+  Future<void> update(String path, Map<String, dynamic> data);
+  Future<DocumentSnapshot<Map<String, dynamic>>?> getDocument(String path);
+  Stream<Map<String, dynamic>?> watchDocument(String path);
+  Stream<List<T>> watchCollection<T>(
+    String path,
+    T Function(Map<String, dynamic>) fromMap, {
+    Query<Map<String, dynamic>> Function(Query<Map<String, dynamic>>)?
+        queryBuilder,
+  });
+
+  Stream<T> watchCollectionSingle<T>(
+    String path,
+    T Function(Map<String, dynamic>) fromMap, {
+    Query<Map<String, dynamic>> Function(Query<Map<String, dynamic>>)?
+        queryBuilder,
+  });
+
+  Future<List<T>> getCollectionPaginated<T>(
+    String path,
+    T Function(Map<String, dynamic>) fromMap, {
+    Query<Map<String, dynamic>> Function(Query<Map<String, dynamic>>)?
+        queryBuilder,
+    DocumentSnapshot<Map<String, dynamic>>? startAfterDocument,
+  });
+  Future<void> runTransaction(
+    Future<void> Function(Transaction) action,
+  );
 }
 
-class FirebaseRemoteDatabaseService implements RemoteDatabaseService {
-  FirebaseFirestore firestore;
-  FirebaseRemoteDatabaseService({
-    required this.firestore,
-  });
+class RemoteDatabaseServiceImpl implements RemoteDatabaseService {
+  final FirebaseFirestore _firestore;
+
+  RemoteDatabaseServiceImpl({
+    FirebaseFirestore? firestore,
+  }) : _firestore = firestore ?? FirebaseFirestore.instance;
+
+  @override
+  Future<void> delete(String path) async {
+    await _firestore.doc(path).delete();
+  }
 
   @override
   Future<T> get<T>(
-      String path, T Function(Map<String, dynamic> p1) fromMap) async {
-    final snapshot = await firestore.doc(path).get();
-    if (!snapshot.exists) throw Exception('Document does not exist');
+    String path,
+    T Function(Map<String, dynamic>) fromMap,
+  ) async {
+    final snapshot = await _firestore.doc(path).get();
+
+    if (!snapshot.exists) {
+      throw Exception('Document does not exist');
+    }
+
     return fromMap(snapshot.data()!);
   }
 
   @override
   Future<void> set<T>(
-      String path, T data, Map<String, dynamic> Function(T) toMap) async {
-    return await firestore.doc(path).set(toMap(data));
+    String path,
+    T data,
+    Map<String, dynamic> Function(T) toMap,
+  ) async {
+    await _firestore.doc(path).set(toMap(data));
   }
 
   @override
-  Future<void> delete(String path) {
-    return firestore.doc(path).delete();
+  Future<void> update(String path, Map<String, dynamic> data) async {
+    await _firestore.doc(path).update(data);
+  }
+
+  @override
+  Future<DocumentSnapshot<Map<String, dynamic>>?> getDocument(
+      String path) async {
+    return _firestore.doc(path).get();
+  }
+
+  @override
+  Stream<Map<String, dynamic>?> watchDocument(String path) {
+    return _firestore.doc(path).snapshots().map((snapshot) => snapshot.data());
+  }
+
+  @override
+  Stream<List<T>> watchCollection<T>(
+    String path,
+    T Function(Map<String, dynamic>) fromMap, {
+    Query<Map<String, dynamic>> Function(Query<Map<String, dynamic>>)?
+        queryBuilder,
+  }) {
+    Query<Map<String, dynamic>> query = _firestore.collection(path);
+    if (queryBuilder != null) {
+      query = queryBuilder(query);
+    }
+
+    return query.snapshots().map(
+        (snapshot) => snapshot.docs.map((doc) => fromMap(doc.data())).toList());
+  }
+
+  @override
+  Stream<T> watchCollectionSingle<T>(
+    String path,
+    T Function(Map<String, dynamic>) fromMap, {
+    Query<Map<String, dynamic>> Function(Query<Map<String, dynamic>>)?
+        queryBuilder,
+  }) {
+    Query<Map<String, dynamic>> query = _firestore.collection(path);
+    if (queryBuilder != null) {
+      query = queryBuilder(query);
+    }
+//TODO: implement watchCollectionSingle
+    return query
+        .snapshots()
+        .map((snapshot) {
+          final doc = snapshot.docChanges.firstOrNull?.doc;
+          if (doc == null) return null;
+          return fromMap(doc.data()!);
+        })
+        .where((element) => element != null)
+        .cast<T>();
+  }
+
+  @override
+  Future<List<T>> getCollectionPaginated<T>(
+    String path,
+    T Function(Map<String, dynamic>) fromMap, {
+    Query<Map<String, dynamic>> Function(Query<Map<String, dynamic>>)?
+        queryBuilder,
+    DocumentSnapshot<Map<String, dynamic>>? startAfterDocument,
+  }) async {
+    Query<Map<String, dynamic>> query = _firestore.collection(path);
+    if (queryBuilder != null) {
+      query = queryBuilder(query);
+    }
+    if (startAfterDocument != null) {
+      query = query.startAfterDocument(startAfterDocument);
+    }
+
+    final snapshot = await query.get();
+    return snapshot.docs.map((doc) => fromMap(doc.data())).toList();
+  }
+
+  @override
+  Future<void> runTransaction(Future<void> Function(Transaction) action) {
+    return _firestore.runTransaction(action);
   }
 }

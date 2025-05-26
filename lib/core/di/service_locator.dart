@@ -10,36 +10,51 @@ import 'package:ping/features/auth/data/datasources/auth_remote_database_source.
 import 'package:ping/features/auth/data/repositories/auth_repo.dart';
 import 'package:ping/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:ping/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:ping/features/home/data/datasources/home_remote_data_source.dart';
+import 'package:ping/features/home/data/repository/home_repository.dart';
+import 'package:ping/features/home/data/repository/home_respository_impl.dart';
+import 'package:ping/features/home/presentation/controller/search_users_bloc/search_users_bloc.dart';
 
-GetIt getIt = GetIt.instance;
+GetIt sl = GetIt.instance;
 
 void setupServiceLocator() {
+
   //CUBITS
-  getIt.registerFactory<AuthCubit>(() => AuthCubit(authRepo: getIt()));
+  sl.registerFactory<AuthCubit>(() => AuthCubit(authRepo: sl()));
+  sl.registerFactory<SearchUsersBloc>(
+      () => SearchUsersBloc(homeRepository: sl()));
+
   //REPOSITORIES
-  getIt.registerLazySingleton<AuthRepo>(() => AuthRepoImplem(
-      authRemoteDataSource: getIt(),
-      authLocalDataSource: getIt(),
-      authRemoteDatabaseSource: getIt()));
+  sl.registerLazySingleton<AuthRepo>(() => AuthRepoImplem(
+      authRemoteDataSource: sl(),
+      authLocalDataSource: sl(),
+      authRemoteDatabaseSource: sl()));
+  sl.registerLazySingleton<HomeRepository>(
+      () => HomeRespositoryImpl(homeRemoteDataSource: sl()));
 
   //DATASOURCES
-  getIt.registerLazySingleton<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImpl(remoteAuthServices: getIt()));
-  getIt.registerLazySingleton<AuthRemoteDatabaseSource>(
-      () => AuthRemoteDatabaseSourceImpl(remoteDatabaseService: getIt()));
+  sl.registerLazySingleton<AuthRemoteDataSource>(
+      () => AuthRemoteDataSourceImpl(remoteAuthServices: sl()));
+  sl.registerLazySingleton<AuthRemoteDatabaseSource>(
+      () => AuthRemoteDatabaseSourceImpl(remoteDatabaseService: sl()));
+
+  sl.registerLazySingleton<HomeRemoteDataSource>(
+      () => HomeRemoteDataSourceImpl(remoteDatabaseService: sl()));
+
 
   //lOCAL DATASOURCE
-  getIt.registerLazySingleton<AuthLocalDataSource>(
-      () => AuthLocalDataSourceImpl(cacheService: getIt()));
+  sl.registerLazySingleton<AuthLocalDataSource>(
+      () => AuthLocalDataSourceImpl(cacheService: sl()));
+
 
   //SERVICES
-  getIt.registerLazySingleton<RemoteAuthServices>(
+  sl.registerLazySingleton<RemoteAuthServices>(
       () => RemoteAuthServicesImpl(firebaseAuth: FirebaseAuth.instance));
 
-  getIt.registerLazySingleton<RemoteDatabaseService>(() =>
-      FirebaseRemoteDatabaseService(firestore: FirebaseFirestore.instance));
+  sl.registerLazySingleton<RemoteDatabaseService>(
+      () => RemoteDatabaseServiceImpl(firestore: FirebaseFirestore.instance));
 
-  getIt.registerLazySingleton<CacheService>(() {
+  sl.registerLazySingleton<CacheService>(() {
     return CacheServiceImpl();
   });
 }

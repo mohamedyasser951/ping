@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ping/features/Chats/presentation/pages/chats_page.dart';
 import 'package:ping/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ping/features/auth/presentation/pages/login_page.dart';
+import 'package:ping/features/home/presentation/pages/home_page.dart';
 
 class SplashScreenPage extends StatelessWidget {
   const SplashScreenPage({super.key});
@@ -17,7 +17,7 @@ class SplashScreenPage extends StatelessWidget {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => state.authStatus.isLoggedIn
-                    ? const ChatsScreen()
+                    ? const HomePage()
                     : const LoginScreen(),
               ),
             );
@@ -30,8 +30,9 @@ class SplashScreenPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 800),
+              AnimatedAlign(
+                alignment: Alignment.center,
+                duration: const Duration(milliseconds: 500),
                 curve: Curves.easeInOut,
                 child: Image.asset(
                   "assets/images/splash-logo.png",

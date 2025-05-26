@@ -11,13 +11,18 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => getIt<AuthCubit>()..init()),
+        BlocProvider(create: (context) => sl<AuthCubit>()..init()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Ping',
           theme: ThemeData(
-            primaryColor: Color(0xff2865DC),
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Color(0xFF1E88E5),
+              primary: Color(0xFF1E88E5),
+              secondary: Color(0xFF1E88E5),
+            ),
+            useMaterial3: true,
           ),
           home: SplashScreenPage()),
     );

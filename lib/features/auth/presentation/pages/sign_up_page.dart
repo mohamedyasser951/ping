@@ -24,9 +24,7 @@ class SignUpScreen extends StatelessWidget {
                       "assets/images/splash-logo.png",
                       width: MediaQuery.of(context).size.width * 0.6,
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    const SizedBox(height: 30),
                     SignUpForm(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

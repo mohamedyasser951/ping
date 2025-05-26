@@ -20,10 +20,8 @@ class AuthRepoImplem implements AuthRepo {
       {required String email, required String password}) async {
     final userCredential =
         await authRemoteDataSource.login(email: email, password: password);
-
     authLocalDataSource.saveUser(userCredential);
     final user = await authRemoteDatabaseSource.getUser(userCredential.uId!);
-
     return user;
   }
 
@@ -34,23 +32,21 @@ class AuthRepoImplem implements AuthRepo {
       required String password}) async {
     final userModel = await authRemoteDataSource.signup(
         name: name, email: email, password: password);
-
     authLocalDataSource.saveUser(userModel);
     authRemoteDatabaseSource.saveUser(userModel);
-
     return userModel;
   }
 
   @override
   Future<void> signOut() async {
-    Future.wait([
+     Future.wait([
       authRemoteDataSource.signout(),
       authLocalDataSource.deleteUser(),
     ]);
   }
 
   @override
-  Future<UserModel?> getUser()async {
+  Future<UserModel?> getUser() async {
     return await authLocalDataSource.getUser();
   }
 }

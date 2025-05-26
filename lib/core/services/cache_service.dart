@@ -15,15 +15,16 @@ class CacheServiceImpl implements CacheService {
       sharedCompleter.complete(prefs);
     });
   }
+  
   @override
   Future<String?> getString(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await sharedCompleter.future;
     return prefs.getString(key);
   }
 
   @override
   Future<bool> setString(String key, String value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await sharedCompleter.future;
     return prefs.setString(key, value);
   }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ping/features/Chats/presentation/pages/chats_page.dart';
 import 'package:ping/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:ping/features/home/presentation/pages/home_page.dart';
 
 class AuthBlocListener extends StatelessWidget {
   const AuthBlocListener({super.key});
@@ -18,7 +18,7 @@ class AuthBlocListener extends StatelessWidget {
             ),
           );
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => ChatsScreen(),
+            builder: (context) => HomePage(),
           ));
         }
         if (state.authStatus.isError) {

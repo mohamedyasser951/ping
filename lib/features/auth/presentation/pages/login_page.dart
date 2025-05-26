@@ -21,9 +21,7 @@ class LoginScreen extends StatelessWidget {
                   "assets/images/splash-logo.png",
                   width: MediaQuery.of(context).size.width * 0.6,
                 ),
-                const SizedBox(
-                  height: 45,
-                ),
+                const SizedBox(height: 45),
                 LoginForm(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -40,14 +38,12 @@ class LoginScreen extends StatelessWidget {
                         child: const Text("Register",
                             style: TextStyle(fontSize: 16)))
                   ],
-                ) 
+                )
               ],
             ),
           ),
         ),
-    ),
+      ),
     );
   }
-  }     
-            
-      
+}

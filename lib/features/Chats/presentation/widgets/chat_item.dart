@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ping/features/Chats/data/models/chat_user_model.dart';
-import 'package:ping/features/Chats/presentation/cubit/chats_cubit.dart';
+import 'package:ping/features/Chats/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
+import 'package:ping/features/auth/data/models/user_model.dart';
 
 class ChatItem extends StatelessWidget {
-  final ChatUserModel model;
+  final UserModel model;
   const ChatItem({super.key, required this.model});
 
   @override
@@ -18,7 +18,6 @@ class ChatItem extends StatelessWidget {
             child: Row(children: [
               CircleAvatar(
                 radius: 25.0,
-                backgroundImage: NetworkImage(model.profileImage),
               ),
               const SizedBox(
                 width: 10.0,
