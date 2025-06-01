@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ping/features/Chats/data/datasources/chats_remote_data_source.dart';
 import 'package:ping/features/Chats/data/models/chat_message.dart';
 import 'package:ping/features/Chats/data/models/chat_room.dart';
 import 'package:ping/features/Chats/data/repositories/chats_repo.dart';
+import 'package:ping/features/auth/data/models/user_model.dart';
 
 class ChatRepositoryImpl implements ChatRepository {
   final ChatRemoteDataSource _chatRemoteDataSource;
@@ -62,8 +62,8 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   Future<ChatRoom> createChat({
-    required User targetUser,
-    required User currentUser,
+    required UserModel targetUser,
+    required UserModel currentUser,
   }) {
     return _chatRemoteDataSource.createChat(
       targetUser: targetUser,

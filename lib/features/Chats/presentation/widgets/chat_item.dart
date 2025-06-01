@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ping/features/Chats/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
+import 'package:ping/features/Chats/presentation/controllers/chat_cubit/chat_cubit.dart';
 import 'package:ping/features/auth/data/models/user_model.dart';
 
 class ChatItem extends StatelessWidget {
@@ -9,7 +9,7 @@ class ChatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatsCubit, ChatsState>(
+    return BlocBuilder<ChatsCubit, ChatState>(
       builder: (context, state) {
         return InkWell(
           onTap: () {},

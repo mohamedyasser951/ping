@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ping/core/di/service_locator.dart';
+import 'package:ping/features/Chats/presentation/controllers/chat_cubit/chat_cubit.dart';
 import 'package:ping/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ping/features/splash/presentation/splash_page.dart';
 
@@ -12,6 +13,7 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => sl<AuthCubit>()..init()),
+        BlocProvider(create: (context) => sl<ChatsCubit>())
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

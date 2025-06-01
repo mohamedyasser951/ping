@@ -52,8 +52,8 @@ class FirebaseAuthUserAdapter {
   UserModel adapt(User user) {
     return UserModel(
         name: user.displayName!,
-        email: user.email,
-        phone: user.phoneNumber,
+        email: user.email ?? '',
+        phone: user.phoneNumber ?? '',
         uId: user.uid);
   }
 }

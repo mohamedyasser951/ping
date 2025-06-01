@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 class UserModel {
-  final String? uId;
+  final String uId;
   final String name;
-  final String? email;
-  final String? phone;
+  final String email;
+  final String phone;
   final bool isOnline;
   final DateTime? lastSeen;
   // final String? image;

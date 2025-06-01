@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ping/features/Chats/data/models/chat_message.dart';
 import 'package:ping/features/Chats/data/models/chat_room.dart';
+import 'package:ping/features/auth/data/models/user_model.dart';
 
 abstract class ChatRepository {
   Stream<List<ChatRoom>> getChatRooms(String userId);
@@ -16,7 +16,7 @@ abstract class ChatRepository {
   Stream<bool> getUserOnlineStatus(String userId);
 
   Future<ChatRoom> createChat({
-    required User targetUser,
-    required User currentUser,
+    required UserModel targetUser,
+    required UserModel currentUser,
   });
 }

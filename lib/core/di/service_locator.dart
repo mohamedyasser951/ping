@@ -4,6 +4,10 @@ import 'package:get_it/get_it.dart';
 import 'package:ping/core/services/cache_service.dart';
 import 'package:ping/core/services/remote_auth_services.dart';
 import 'package:ping/core/services/remote_database_service.dart';
+import 'package:ping/features/Chats/data/datasources/chats_remote_data_source.dart';
+import 'package:ping/features/Chats/data/repositories/chat_repo_implm.dart';
+import 'package:ping/features/Chats/data/repositories/chats_repo.dart';
+import 'package:ping/features/Chats/presentation/controllers/chat_cubit/chat_cubit.dart';
 import 'package:ping/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:ping/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:ping/features/auth/data/datasources/auth_remote_database_source.dart';
@@ -18,11 +22,11 @@ import 'package:ping/features/home/presentation/controller/search_users_bloc/sea
 GetIt sl = GetIt.instance;
 
 void setupServiceLocator() {
-
   //CUBITS
   sl.registerFactory<AuthCubit>(() => AuthCubit(authRepo: sl()));
   sl.registerFactory<SearchUsersBloc>(
       () => SearchUsersBloc(homeRepository: sl()));
+  sl.registerFactory<ChatsCubit>(() => ChatsCubit(chatRepository: sl()));
 
   //REPOSITORIES
   sl.registerLazySingleton<AuthRepo>(() => AuthRepoImplem(
@@ -31,6 +35,8 @@ void setupServiceLocator() {
       authRemoteDatabaseSource: sl()));
   sl.registerLazySingleton<HomeRepository>(
       () => HomeRespositoryImpl(homeRemoteDataSource: sl()));
+  sl.registerLazySingleton<ChatRepository>(
+      () => ChatRepositoryImpl(chatRemoteDataSource: sl()));
 
   //DATASOURCES
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -41,11 +47,12 @@ void setupServiceLocator() {
   sl.registerLazySingleton<HomeRemoteDataSource>(
       () => HomeRemoteDataSourceImpl(remoteDatabaseService: sl()));
 
+  sl.registerLazySingleton<ChatRemoteDataSource>(
+      () => ChatRemoteDataSourceImpl(remoteDatabaseService: sl()));
 
   //lOCAL DATASOURCE
   sl.registerLazySingleton<AuthLocalDataSource>(
       () => AuthLocalDataSourceImpl(cacheService: sl()));
-
 
   //SERVICES
   sl.registerLazySingleton<RemoteAuthServices>(

@@ -21,7 +21,7 @@ class AuthRepoImplem implements AuthRepo {
     final userCredential =
         await authRemoteDataSource.login(email: email, password: password);
     authLocalDataSource.saveUser(userCredential);
-    final user = await authRemoteDatabaseSource.getUser(userCredential.uId!);
+    final user = await authRemoteDatabaseSource.getUser(userCredential.uId);
     return user;
   }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ping/core/di/service_locator.dart';
+import 'package:ping/features/Chats/presentation/controllers/chat_cubit/chat_cubit.dart';
+import 'package:ping/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ping/features/home/presentation/controller/search_users_bloc/search_users_bloc.dart';
 
 class SearchPage extends StatelessWidget {
@@ -10,14 +12,12 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<SearchUsersBloc>(),
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            appBar: _buildAppBar(),
-            body: _buildBody(),
-          );
-        }
-      ),
+      child: Builder(builder: (context) {
+        return Scaffold(
+          appBar: _buildAppBar(),
+          body: _buildBody(),
+        );
+      }),
     );
   }
 
@@ -71,8 +71,13 @@ class SearchPage extends StatelessWidget {
           itemBuilder: (context, index) {
             return ListTile(
               title: Text(usersList[index].name),
-              subtitle: Text(usersList[index].email ?? 'No email provided'),
-              onLongPress: () {},
+              subtitle: Text(usersList[index].email),
+              onLongPress: () {
+                final targetUser = usersList[index];
+                final currentUser = context.read<AuthCubit>().state.user!;
+                context.read<ChatsCubit>().createChat(
+                    targetUser: targetUser, currentUser: currentUser);
+              },
             );
           },
         );
