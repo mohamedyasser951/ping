@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -110,8 +109,25 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   }
 
   AppBar _buildAppBar() {
+    final otherParticipant = widget.otherParticipant;
     return AppBar(
-      title: Text(widget.otherParticipant.name),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(widget.otherParticipant.name,
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+          Text(
+            otherParticipant.isOnline ? 'Online' : 'Offline',
+            style: TextStyle(
+              fontSize: 14,
+              color: otherParticipant.isOnline
+                  ? Colors.greenAccent
+                  : Colors.redAccent,
+            ),
+          ),
+        ],
+      ),
       actions: [
         IconButton(
           icon: const Icon(Icons.brush),
@@ -124,12 +140,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 ),
               ),
             );
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.more_vert),
-          onPressed: () {
-            // TODO: Implement chat options menu
           },
         ),
       ],
@@ -272,7 +282,7 @@ class _ChatBubble extends StatelessWidget {
             ),
             const SizedBox(height: 5),
             Text(
-              _formatTime(message.timestamp),
+              formatTime(message.timestamp),
               style: TextStyle(
                 color: isMyMessage ? Colors.white70 : Colors.black54,
                 fontSize: 12,
@@ -283,8 +293,8 @@ class _ChatBubble extends StatelessWidget {
       ),
     );
   }
+}
 
-  String _formatTime(DateTime time) {
-    return '${time.hour}:${time.minute.toString().padLeft(2, '0')}';
-  }
+String formatTime(DateTime time) {
+  return '${time.hour}:${time.minute.toString().padLeft(2, '0')}';
 }

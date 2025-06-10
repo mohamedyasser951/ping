@@ -22,19 +22,44 @@ class ChatItem extends StatelessWidget {
     return BlocBuilder<ChatsCubit, ChatState>(
       builder: (context, state) {
         return ListTile(
+          contentPadding: const EdgeInsets.all(0),
           leading: CircleAvatar(
             child: Text(otherParticipant!.name[0].toUpperCase()),
           ),
-          title: Text(otherParticipant.name),
-          subtitle: Text(
-            otherParticipant.isOnline ? 'Online' : 'Offline',
-            style: TextStyle(
-              color: otherParticipant.isOnline
-                  ? Colors.greenAccent
-                  : Colors.redAccent,
-            ),
+          title: Row(
+            spacing: 6,
+            children: [
+              Expanded(
+                child: Text(otherParticipant.name,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              Text(
+                formatTime(room.lastMessage?.timestamp ?? DateTime.now()),
+                style: const TextStyle(fontSize: 12),
+              ),
+            ],
           ),
-          trailing: Text(room.lastMessage?.timestamp.toString() ?? ''),
+          subtitle: Row(
+            spacing: 6,
+            children: [
+              Icon(
+                Icons.done_all_outlined,
+                color: room.lastMessage!.isRead ? Colors.blue : Colors.grey,
+                size: 18,
+              ),
+              Text(
+                room.lastMessage?.content ?? 'No messages yet',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ],
+          ),
+          // trailing: Text(
+          //   formatTime(room.lastMessage?.timestamp ?? DateTime.now()),
+          //   style: const TextStyle(fontSize: 12),
+          // ),
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
