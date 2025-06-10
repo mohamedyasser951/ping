@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ping/features/Chats/presentation/pages/chats_page.dart';
+import 'package:ping/features/home/presentation/pages/chats_list_page.dart';
 import 'package:ping/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ping/features/auth/presentation/pages/login_page.dart';
 import 'package:ping/features/home/presentation/pages/profile_page.dart';
@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
 
   final List<Widget> _children = [
-    ChatsScreen(),
+    ChatsListPage(),
     ProfilePage(),
   ];
 

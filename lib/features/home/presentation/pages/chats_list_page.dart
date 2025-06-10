@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ping/features/Chats/presentation/controllers/chat_cubit/chat_cubit.dart';
-import 'package:ping/features/Chats/presentation/widgets/chat_item.dart';
+import 'package:ping/features/home/presentation/controller/chat_cubit/chat_cubit.dart';
+import 'package:ping/features/home/presentation/widgets/chat_item.dart';
 import 'package:ping/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ping/features/home/presentation/pages/search_page.dart';
 
-class ChatsScreen extends StatefulWidget {
-  const ChatsScreen({super.key});
+class ChatsListPage extends StatefulWidget {
+  const ChatsListPage({super.key});
 
   @override
-  State<ChatsScreen> createState() => _ChatsScreenState();
+  State<ChatsListPage> createState() =>  _ChatsListPageState();
 }
 
-class _ChatsScreenState extends State<ChatsScreen> {
+class _ChatsListPageState extends State<ChatsListPage> {
   @override
   void initState() {
     context.read<ChatsCubit>().init(context.read<AuthCubit>().state.user!.uId);

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ping/features/Chats/data/models/chat_room.dart';
-import 'package:ping/features/Chats/presentation/controllers/chat_cubit/chat_cubit.dart';
+import 'package:ping/features/Chats/presentation/pages/chat_room_page.dart';
+import 'package:ping/features/home/presentation/controller/chat_cubit/chat_cubit.dart';
 import 'package:ping/features/auth/presentation/cubit/auth_cubit.dart';
 
 class ChatItem extends StatelessWidget {
@@ -17,7 +18,7 @@ class ChatItem extends StatelessWidget {
     final otherParticipantId =
         room.participantIds.firstWhere((id) => id != currentUserId);
     final otherParticipant = room.participants[otherParticipantId];
-    
+
     return BlocBuilder<ChatsCubit, ChatState>(
       builder: (context, state) {
         return ListTile(
@@ -34,7 +35,17 @@ class ChatItem extends StatelessWidget {
             ),
           ),
           trailing: Text(room.lastMessage?.timestamp.toString() ?? ''),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ChatRoomPage(
+                  room: room,
+                  otherParticipant: otherParticipant,
+                  currentUser: currentUser!,
+                ),
+              ),
+            );
+          },
         );
       },
     );
