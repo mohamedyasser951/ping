@@ -13,39 +13,28 @@ class ChatItem extends StatelessWidget {
     final currentUser = context.read<AuthCubit>().state.user;
     final currentUserId = currentUser?.uId;
     if (currentUserId == null) return const SizedBox();
+
     final otherParticipantId =
         room.participantIds.firstWhere((id) => id != currentUserId);
     final otherParticipant = room.participants[otherParticipantId];
+    
     return BlocBuilder<ChatsCubit, ChatState>(
       builder: (context, state) {
-        return InkWell(
-          onTap: () {},
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(children: [
-              CircleAvatar(
-                radius: 25.0,
-              ),
-              const SizedBox(
-                width: 10.0,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    otherParticipant!.name,
-                  ),
-                  Text(
-                    room.lastMessage?.content ?? '',
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Text(
-                room.lastMessage?.timestamp.toString() ?? '',
-              ),
-            ]),
+        return ListTile(
+          leading: CircleAvatar(
+            child: Text(otherParticipant!.name[0].toUpperCase()),
           ),
+          title: Text(otherParticipant.name),
+          subtitle: Text(
+            otherParticipant.isOnline ? 'Online' : 'Offline',
+            style: TextStyle(
+              color: otherParticipant.isOnline
+                  ? Colors.greenAccent
+                  : Colors.redAccent,
+            ),
+          ),
+          trailing: Text(room.lastMessage?.timestamp.toString() ?? ''),
+          onTap: () {},
         );
       },
     );

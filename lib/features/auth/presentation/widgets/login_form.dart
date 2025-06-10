@@ -15,6 +15,7 @@ class _LoginFormState extends State<LoginForm> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   late GlobalKey<FormState> _formKey;
+  bool _obscureText = true;
 
   @override
   void initState() {
@@ -56,11 +57,13 @@ class _LoginFormState extends State<LoginForm> {
           AppTextFileld(
               controller: _passwordController,
               hint: "Password",
-              obscureText: true,
+              obscureText: _obscureText,
               textInputType: TextInputType.visiblePassword,
               prefixIcon: Icons.lock_outline,
-              suffixWidget:
-                  IconButton(onPressed: null, icon: Icon(Icons.visibility)),
+              suffixWidget: IconButton(
+                  onPressed: () => setState(() => _obscureText = !_obscureText),
+                  icon: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility)),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Password is required";

@@ -17,6 +17,7 @@ class _SignUpFormState extends State<SignUpForm> {
   late TextEditingController _passwordController;
   // late TextEditingController _phoneController;
   late GlobalKey<FormState> _formKey;
+  bool _obscureText = true;
 
   @override
   void initState() {
@@ -36,6 +37,10 @@ class _SignUpFormState extends State<SignUpForm> {
 
       FocusScope.of(context).unfocus();
     }
+  }
+
+  void _toggleObscureText() {
+    setState(() => _obscureText = !_obscureText);
   }
 
   @override
@@ -70,34 +75,24 @@ class _SignUpFormState extends State<SignUpForm> {
             prefixIcon: Icons.email_outlined,
             hint: "Email",
           ),
-
-          // AppTextFileld(
-          //   controller: _phoneController,
-          //   validator: (value) {
-          //     if (value == null || value.isEmpty) {
-          //       return "Phone is required";
-          //     }
-          //     return null;
-          //   },
-          //   textInputType: TextInputType.phone,
-          //   prefixIcon: Icons.phone,
-          //   hint: "Phone",
-          // ),
-
           AppTextFileld(
-              controller: _passwordController,
-              hint: "Password",
-              obscureText: true,
-              textInputType: TextInputType.visiblePassword,
-              prefixIcon: Icons.lock_outline,
-              suffixWidget:
-                  IconButton(onPressed: null, icon: Icon(Icons.visibility)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Password is required";
-                }
-                return null;
-              }),
+            controller: _passwordController,
+            hint: "Password",
+            obscureText: _obscureText,
+            textInputType: TextInputType.visiblePassword,
+            prefixIcon: Icons.lock_outline,
+            suffixWidget: IconButton(
+              onPressed: _toggleObscureText,
+              icon:
+                  Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Password is required";
+              }
+              return null;
+            },
+          ),
           BlocBuilder<AuthCubit, AuthState>(
             builder: (context, state) {
               return AppButton(
