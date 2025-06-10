@@ -65,50 +65,89 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
 
   @override
   Future<List<ChatMessage>> getChatMessagesPaginated(String roomId,
-      {int limit = 20, String? lastMessageId}) {
-    throw UnimplementedError();
+      {int limit = 20, String? lastMessageId}) async {
+    final lastDoc = lastMessageId != null
+        ? await remoteDatabaseService
+            .getDocument('chatRooms/$roomId/messages/$lastMessageId')
+        : null;
+    return remoteDatabaseService.getCollectionPaginated(
+      'chatRooms/$roomId/messages',
+      ChatMessage.fromMap,
+      queryBuilder: (query) =>
+          query.orderBy('timestamp', descending: true).limit(limit),
+      startAfterDocument: lastDoc,
+    );
   }
 
   @override
   Future<List<ChatRoom>> getChatRoomsPaginated(String userId,
-      {int limit = 20, String? lastRoomId}) {
-    throw UnimplementedError();
+      {int limit = 20, String? lastRoomId}) async {
+    final lastDoc = lastRoomId != null
+        ? await remoteDatabaseService.getDocument('chatRooms/$lastRoomId')
+        : null;
+
+    return remoteDatabaseService.getCollectionPaginated(
+      'chatRooms',
+      ChatRoom.fromMap,
+      queryBuilder: (query) => query
+          .where('participantIds', arrayContains: userId)
+          .orderBy('updatedAt', descending: true)
+          .limit(limit),
+      startAfterDocument: lastDoc,
+    );
   }
 
   @override
   Stream<bool> getUserOnlineStatus(String userId) {
-    // TODO: implement getUserOnlineStatus
-    throw UnimplementedError();
+    return remoteDatabaseService
+        .watchDocument('users/$userId')
+        .map((data) => data?['isOnline'] ?? false);
   }
 
   @override
   Stream<List<ChatMessage>> listenToChatMessages(String roomId) {
-    // TODO: implement listenToChatMessages
-    throw UnimplementedError();
+    return remoteDatabaseService.watchCollection(
+      'chatRooms/$roomId/messages',
+      ChatMessage.fromMap,
+      queryBuilder: (query) => query.orderBy('timestamp', descending: true),
+    );
   }
 
   @override
   Future<void> markMessageAsRead(String roomId, String messageId) {
-    // TODO: implement markMessageAsRead
     throw UnimplementedError();
   }
 
   @override
-  Future<void> sendMessage(String roomId, ChatMessage message) {
-    // TODO: implement sendMessage
-    throw UnimplementedError();
+  Future<void> sendMessage(String roomId, ChatMessage message) async {
+    await remoteDatabaseService.set(
+      'chatRooms/$roomId/messages/${message.id}',
+      message,
+      (message) => message.toMap(),
+    );
+
+    await remoteDatabaseService.update(
+      'chatRooms/$roomId',
+      {
+        'lastMessage': message.toMap(),
+        'updatedAt': DateTime.now().toIso8601String(),
+      },
+    );
   }
 
   @override
   Future<void> updateUserLastSeen(String userId) {
-    // TODO: implement updateUserLastSeen
-    throw UnimplementedError();
+    return remoteDatabaseService.update('users/$userId', {
+      'lastSeen': DateTime.now().toIso8601String(),
+    });
   }
 
   @override
   Future<void> updateUserOnlineStatus(String userId, bool isOnline) {
-    // TODO: implement updateUserOnlineStatus
-    throw UnimplementedError();
+    return remoteDatabaseService.update('users/$userId', {
+      'isOnline': isOnline,
+      'lastSeen': DateTime.now().toIso8601String(),
+    });
   }
 
   Future<bool> checkChatExists(
