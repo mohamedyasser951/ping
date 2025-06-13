@@ -1,14 +1,15 @@
 import 'dart:ui';
 
-
 class DrawingPoint {
   final Offset? position;
   final Paint? paint;
+  final DateTime timestamp;
 
   DrawingPoint({
     required this.position,
     required this.paint,
-  });
+    DateTime? timestamp,
+  }) : timestamp = timestamp ?? DateTime.now();
 
   factory DrawingPoint.fromMap(Map<String, dynamic> map) {
     return DrawingPoint(
@@ -22,14 +23,16 @@ class DrawingPoint {
             ..isAntiAlias = true
             ..strokeWidth = 5.0
             ..strokeCap = StrokeCap.round),
+      timestamp: DateTime.parse(map['timestamp']),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'x': position?.dx,
+        'x': position?.dx,
       'y': position?.dy,
       'color': paint?.color.value,
+      'timestamp': timestamp.toIso8601String(),
     }..removeWhere((_, v) => v == null);
   }
 

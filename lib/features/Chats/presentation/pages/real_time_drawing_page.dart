@@ -21,62 +21,6 @@ class RealTimeDrawingPage extends StatefulWidget {
 }
 
 class _RealTimeDrawingPageState extends State<RealTimeDrawingPage> {
-  // List<DrawingPoint?> _points = [];
-  // Color _selectedColor = Colors.black;
-
-  // // void _clearBoard() {
-  // //   setState(() {
-  // //     _points = [];
-  // //   });
-  // // }
-
-  // void _startDrawing(Offset position) {
-  //   setState(() {
-  //     _points.add(
-  //       DrawingPoint(
-  //         position: position,
-  //         paint: Paint()
-  //           ..color = _selectedColor
-  //           ..isAntiAlias = true
-  //           ..strokeWidth = 5.0
-  //           ..strokeCap = StrokeCap.round,
-  //       ),
-  //     );
-  //   });
-  // }
-
-  // void _updateDrawing(Offset position) {
-  //   setState(() {
-  //     _points.add(
-  //       DrawingPoint(
-  //         position: position,
-  //         paint: Paint()
-  //           ..color = _selectedColor
-  //           ..isAntiAlias = true
-  //           ..strokeWidth = 5.0
-  //           ..strokeCap = StrokeCap.round,
-  //       ),
-  //     );
-  //   });
-  // }
-
-  // void _stopDrawing() {
-  //   setState(() {
-  //     _points.add(
-  //       DrawingPoint(
-  //         position: null,
-  //         paint: null,
-  //       ),
-  //     );
-  //   });
-  // }
-
-  // void _changeColor(Color color) {
-  //   setState(() {
-  //     _selectedColor = color;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

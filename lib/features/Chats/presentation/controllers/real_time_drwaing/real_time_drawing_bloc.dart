@@ -8,10 +8,33 @@ class RealTimeDrawingBloc
     extends Bloc<RealTimeDrawingEvent, RealTimeDrawingState> {
   RealTimeDrawingBloc() : super(const RealTimeDrawingState()) {
     on<RealTimeDrawingStartedEvent>(_onRealTimeDrawingStartedEvent);
-    on<RealTimeDrawingUpdatedEvent>(_onRealTimeDrawingEvent);
+    on<RealTimeDrawingUpdatedEvent>(_onRealTimeDrawingEvent,
+        transformer: (events, mapper) => events.where((event) {
+              DrawingPoint? lastPoint =
+                  state.points.isNotEmpty && state.points.last != null
+                      ? state.points.last!
+                      : null;
+
+              if (lastPoint == null) return true;
+
+              double distance = _calculateDistance(
+                  lastPoint.position, event.drawingPoint.position);
+
+              bool isValidDistance = distance >= 5;
+              bool isValidTime = event.drawingPoint.timestamp
+                      .difference(lastPoint.timestamp)
+                      .inMilliseconds <
+                  10;
+
+              return isValidDistance || isValidTime;
+            }));
     on<RealTimeDrawingStoppedEvent>(_onRealTimeDrawingStoppedEvent);
     on<ClearBoardDrawingEvent>(_onClearBoardDrawingEvent);
     on<ChangeSelectedColorEvent>(_onChangeSelectedColorEvent);
+  }
+  double _calculateDistance(Offset? p1, Offset? p2) {
+    if (p1 == null || p2 == null) return 0;
+    return (p1 - p2).distance;
   }
 
   void _onRealTimeDrawingStartedEvent(
