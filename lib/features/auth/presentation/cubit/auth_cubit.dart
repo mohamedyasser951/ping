@@ -51,4 +51,14 @@ class AuthCubit extends Cubit<AuthState> {
           authStatus: AuthStatus.error, errorMessage: e.toString()));
     }
   }
+
+  void googleSignIn() async {
+    try {
+      final user = await authRepo.googleSignIn();
+      emit(state.copyWith(authStatus: AuthStatus.loggedIn, user: user));
+    } catch (e) {
+      emit(state.copyWith(
+          authStatus: AuthStatus.error, errorMessage: e.toString()));
+    }
+  }
 }

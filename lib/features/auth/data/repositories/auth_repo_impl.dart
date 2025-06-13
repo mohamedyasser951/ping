@@ -39,7 +39,7 @@ class AuthRepoImplem implements AuthRepo {
 
   @override
   Future<void> signOut() async {
-     Future.wait([
+    Future.wait([
       authRemoteDataSource.signout(),
       authLocalDataSource.deleteUser(),
     ]);
@@ -48,5 +48,19 @@ class AuthRepoImplem implements AuthRepo {
   @override
   Future<UserModel?> getUser() async {
     return await authLocalDataSource.getUser();
+  }
+
+  @override
+  Future<UserModel> googleSignIn() async {
+    final userCredential = await authRemoteDataSource.googleSignIn();
+    authLocalDataSource.saveUser(userCredential.$1);
+
+    if (userCredential.$2) {
+      authRemoteDatabaseSource.saveUser(userCredential.$1);
+    } else {
+      await authRemoteDatabaseSource.getUser(userCredential.$1.uId);
+    }
+
+    return userCredential.$1;
   }
 }

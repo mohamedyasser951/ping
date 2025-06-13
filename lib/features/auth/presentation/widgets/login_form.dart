@@ -72,17 +72,42 @@ class _LoginFormState extends State<LoginForm> {
               }),
           BlocBuilder<AuthCubit, AuthState>(
             builder: (context, state) {
-              return AppButton(
-                buttoncolor: Color(0xff2865DC),
-                onPressed: trySubmit,
-                child: state.authStatus.isLoading
-                    ? CircularProgressIndicator(
-                        color: Colors.white,
-                      )
-                    : const Text(
-                        "Login",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+              return Visibility(
+                visible: !state.authStatus.isLoading,
+                replacement: const Center(child: CircularProgressIndicator()),
+                child: AppButton(
+                  buttoncolor: Color(0xff2865DC),
+                  onPressed: trySubmit,
+                  child: const Text(
+                    "Login",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ),
+              );
+            },
+          ),
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, state) {
+              return Visibility(
+                visible: !state.authStatus.isLoading,
+                replacement: const Center(child: CircularProgressIndicator()),
+                child: AppButton(
+                  buttoncolor: Colors.grey,
+                  onPressed: () {
+                    context.read<AuthCubit>().googleSignIn();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 6,
+                    children: [
+                      Image.asset("assets/images/google.png", width: 30),
+                      const Text(
+                        "Login with Google",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
+                    ],
+                  ),
+                ),
               );
             },
           ),
