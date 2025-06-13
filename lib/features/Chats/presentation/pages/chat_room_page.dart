@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ping/core/di/service_locator.dart';
 import 'package:ping/features/Chats/data/models/chat_message.dart';
 import 'package:ping/features/Chats/data/models/chat_room.dart';
-import 'package:ping/features/Chats/presentation/controllers/cubit/chat_room_cubit.dart';
+import 'package:ping/features/Chats/presentation/controllers/chat_room/chat_room_cubit.dart';
 import 'package:ping/features/Chats/presentation/pages/real_time_drawing_page.dart';
 import 'package:ping/features/auth/data/models/user_model.dart';
 
