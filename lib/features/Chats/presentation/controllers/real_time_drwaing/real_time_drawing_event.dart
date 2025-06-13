@@ -1,25 +1,25 @@
 part of 'real_time_drawing_bloc.dart';
 
 @immutable
-sealed class RealTimeDrawingEvent {
-  const RealTimeDrawingEvent();
+sealed class BoardEvent {
+  const BoardEvent();
 }
 
-class RealTimeDrawingStartedEvent extends RealTimeDrawingEvent {
+class StartDrawingEvent extends BoardEvent {
   final DrawingPoint drawingPoint;
-  const RealTimeDrawingStartedEvent({required this.drawingPoint});
+  const StartDrawingEvent({required this.drawingPoint});
 }
 
-class RealTimeDrawingUpdatedEvent extends RealTimeDrawingEvent {
+class UpdateDrawingEvent extends BoardEvent {
   final DrawingPoint drawingPoint;
-  const RealTimeDrawingUpdatedEvent({required this.drawingPoint});
+  const UpdateDrawingEvent({required this.drawingPoint});
 }
 
-class RealTimeDrawingStoppedEvent extends RealTimeDrawingEvent {}
+class EndDrawingEvent extends BoardEvent {}
 
-class ClearBoardDrawingEvent extends RealTimeDrawingEvent {}
+class ClearBoardDrawingEvent extends BoardEvent {}
 
-class ChangeSelectedColorEvent extends RealTimeDrawingEvent {
+class ChangeSelectedColorEvent extends BoardEvent {
   final Color color;
   const ChangeSelectedColorEvent({required this.color});
 }

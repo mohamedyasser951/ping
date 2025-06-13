@@ -45,8 +45,7 @@ class _RealTimeDrawingPageState extends State<RealTimeDrawingPage> {
                 },
                 builder: (context, selectedColor) {
                   return GestureDetector(
-                    onPanStart: (details) =>
-                        drawingBloc.add(RealTimeDrawingStartedEvent(
+                    onPanStart: (details) => drawingBloc.add(StartDrawingEvent(
                       drawingPoint: DrawingPoint(
                         position: details.localPosition,
                         paint: Paint()
@@ -57,7 +56,7 @@ class _RealTimeDrawingPageState extends State<RealTimeDrawingPage> {
                       ),
                     )),
                     onPanUpdate: (details) =>
-                        drawingBloc.add(RealTimeDrawingUpdatedEvent(
+                        drawingBloc.add(UpdateDrawingEvent(
                       drawingPoint: DrawingPoint(
                         position: details.localPosition,
                         paint: Paint()
@@ -67,8 +66,7 @@ class _RealTimeDrawingPageState extends State<RealTimeDrawingPage> {
                           ..strokeCap = StrokeCap.round,
                       ),
                     )),
-                    onPanEnd: (details) =>
-                        drawingBloc.add(RealTimeDrawingStoppedEvent()),
+                    onPanEnd: (details) => drawingBloc.add(EndDrawingEvent()),
                     child: BlocSelector<RealTimeDrawingBloc,
                         RealTimeDrawingState, List<DrawingPoint?>>(
                       selector: (state) {

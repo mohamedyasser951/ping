@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ping/features/Chats/data/models/drawing_point.dart';
+import 'package:rxdart/rxdart.dart';
 part 'real_time_drawing_event.dart';
 part 'real_time_drawing_state.dart';
 
-class RealTimeDrawingBloc
-    extends Bloc<RealTimeDrawingEvent, RealTimeDrawingState> {
+class RealTimeDrawingBloc extends Bloc<BoardEvent, RealTimeDrawingState> {
   RealTimeDrawingBloc() : super(const RealTimeDrawingState()) {
-    on<RealTimeDrawingStartedEvent>(_onRealTimeDrawingStartedEvent);
-    on<RealTimeDrawingUpdatedEvent>(_onRealTimeDrawingEvent,
+    on<StartDrawingEvent>(_onRealTimeDrawingStartedEvent);
+    on<UpdateDrawingEvent>(_onRealTimeDrawingEvent,
         transformer: (events, mapper) => events.where((event) {
               DrawingPoint? lastPoint =
                   state.points.isNotEmpty && state.points.last != null
@@ -27,8 +27,8 @@ class RealTimeDrawingBloc
                   10;
 
               return isValidDistance || isValidTime;
-            }));
-    on<RealTimeDrawingStoppedEvent>(_onRealTimeDrawingStoppedEvent);
+            }).switchMap(mapper));
+    on<EndDrawingEvent>(_onRealTimeDrawingStoppedEvent);
     on<ClearBoardDrawingEvent>(_onClearBoardDrawingEvent);
     on<ChangeSelectedColorEvent>(_onChangeSelectedColorEvent);
   }
@@ -38,19 +38,19 @@ class RealTimeDrawingBloc
   }
 
   void _onRealTimeDrawingStartedEvent(
-      RealTimeDrawingStartedEvent event, Emitter<RealTimeDrawingState> emit) {
+      StartDrawingEvent event, Emitter<RealTimeDrawingState> emit) {
     final DrawingPoint newPoints = event.drawingPoint;
     emit(state.copyWith(points: [...state.points, newPoints]));
   }
 
   void _onRealTimeDrawingEvent(
-      RealTimeDrawingUpdatedEvent event, Emitter<RealTimeDrawingState> emit) {
+      UpdateDrawingEvent event, Emitter<RealTimeDrawingState> emit) {
     final DrawingPoint newPoints = event.drawingPoint;
     emit(state.copyWith(points: [...state.points, newPoints]));
   }
 
   void _onRealTimeDrawingStoppedEvent(
-      RealTimeDrawingStoppedEvent event, Emitter<RealTimeDrawingState> emit) {
+      EndDrawingEvent event, Emitter<RealTimeDrawingState> emit) {
     emit(state.copyWith(points: [...state.points, null]));
   }
 
