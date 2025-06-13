@@ -49,17 +49,15 @@ class ChatItem extends StatelessWidget {
                 color: room.lastMessage!.isRead ? Colors.blue : Colors.grey,
                 size: 18,
               ),
-              Text(
-                room.lastMessage?.content ?? 'No messages yet',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
+              Expanded(
+                child: Text(
+                  room.lastMessage?.content ?? 'No messages yet',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
               ),
             ],
           ),
-          // trailing: Text(
-          //   formatTime(room.lastMessage?.timestamp ?? DateTime.now()),
-          //   style: const TextStyle(fontSize: 12),
-          // ),
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(

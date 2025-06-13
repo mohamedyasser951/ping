@@ -3,6 +3,7 @@ import 'package:ping/features/auth/data/models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UserModel> login({required String email, required String password});
+  Future<(UserModel user , bool isNewUser)> googleSignIn();
 
   Future<UserModel> signup(
       {required String name, required String email, required String password});
@@ -31,5 +32,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> signout() {
     return remoteAuthServices.signOut();
+  }
+
+  @override
+  Future<(UserModel user , bool isNewUser)> googleSignIn() {
+    return remoteAuthServices.googleSignIn();
   }
 }

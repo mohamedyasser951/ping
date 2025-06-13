@@ -7,6 +7,8 @@ class UserModel {
   final String phone;
   final bool isOnline;
   final DateTime? lastSeen;
+    final bool? isNewUser;
+
   // final String? image;
 
   UserModel(
@@ -15,7 +17,8 @@ class UserModel {
       required this.phone,
       required this.uId,
       this.isOnline = false,
-      this.lastSeen
+      this.lastSeen,
+      this.isNewUser,
       // required this.image
       });
 
