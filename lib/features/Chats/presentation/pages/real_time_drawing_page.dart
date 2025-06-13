@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ping/core/di/service_locator.dart';
 import 'dart:ui' as ui;
 
 import 'package:ping/features/Chats/data/models/drawing_point.dart';
+import 'package:ping/features/Chats/presentation/controllers/real_time_drwaing/real_time_drawing_bloc.dart';
 
 class RealTimeDrawingPage extends StatefulWidget {
   const RealTimeDrawingPage({
@@ -18,117 +21,168 @@ class RealTimeDrawingPage extends StatefulWidget {
 }
 
 class _RealTimeDrawingPageState extends State<RealTimeDrawingPage> {
-  List<DrawingPoint?> _points = [];
-  Color _selectedColor = Colors.black;
+  // List<DrawingPoint?> _points = [];
+  // Color _selectedColor = Colors.black;
 
-  void _clearBoard() {
-    setState(() {
-      _points = [];
-    });
-  }
+  // // void _clearBoard() {
+  // //   setState(() {
+  // //     _points = [];
+  // //   });
+  // // }
 
-  void _startDrawing(Offset position) {
-    setState(() {
-      _points.add(
-        DrawingPoint(
-          position: position,
-          paint: Paint()
-            ..color = _selectedColor
-            ..isAntiAlias = true
-            ..strokeWidth = 5.0
-            ..strokeCap = StrokeCap.round,
-        ),
-      );
-    });
-  }
+  // void _startDrawing(Offset position) {
+  //   setState(() {
+  //     _points.add(
+  //       DrawingPoint(
+  //         position: position,
+  //         paint: Paint()
+  //           ..color = _selectedColor
+  //           ..isAntiAlias = true
+  //           ..strokeWidth = 5.0
+  //           ..strokeCap = StrokeCap.round,
+  //       ),
+  //     );
+  //   });
+  // }
 
-  void _updateDrawing(Offset position) {
-    setState(() {
-      _points.add(
-        DrawingPoint(
-          position: position,
-          paint: Paint()
-            ..color = _selectedColor
-            ..isAntiAlias = true
-            ..strokeWidth = 5.0
-            ..strokeCap = StrokeCap.round,
-        ),
-      );
-    });
-  }
+  // void _updateDrawing(Offset position) {
+  //   setState(() {
+  //     _points.add(
+  //       DrawingPoint(
+  //         position: position,
+  //         paint: Paint()
+  //           ..color = _selectedColor
+  //           ..isAntiAlias = true
+  //           ..strokeWidth = 5.0
+  //           ..strokeCap = StrokeCap.round,
+  //       ),
+  //     );
+  //   });
+  // }
 
-  void _stopDrawing() {
-    setState(() {
-      _points.add(
-        DrawingPoint(
-          position: null,
-          paint: null,
-        ),
-      );
-    });
-  }
+  // void _stopDrawing() {
+  //   setState(() {
+  //     _points.add(
+  //       DrawingPoint(
+  //         position: null,
+  //         paint: null,
+  //       ),
+  //     );
+  //   });
+  // }
 
-  void _changeColor(Color color) {
-    setState(() {
-      _selectedColor = color;
-    });
-  }
+  // void _changeColor(Color color) {
+  //   setState(() {
+  //     _selectedColor = color;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Drawing Board'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: _clearBoard,
+    return BlocProvider(
+      create: (context) => sl<RealTimeDrawingBloc>(),
+      child: Builder(builder: (context) {
+        RealTimeDrawingBloc drawingBloc = context.read<RealTimeDrawingBloc>();
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Drawing Board'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () => drawingBloc.add(ClearBoardDrawingEvent()),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          GestureDetector(
-            onPanStart: (details) => _startDrawing(details.localPosition),
-            onPanUpdate: (details) => _updateDrawing(details.localPosition),
-            onPanEnd: (details) => _stopDrawing(),
-            child: CustomPaint(
-              painter: _DrawingPainter(_points),
-              size: Size.infinite,
-            ),
+          body: Stack(
+            children: [
+              BlocSelector<RealTimeDrawingBloc, RealTimeDrawingState, Color>(
+                selector: (state) {
+                  return state.selectedColor;
+                },
+                builder: (context, selectedColor) {
+                  return GestureDetector(
+                    onPanStart: (details) =>
+                        drawingBloc.add(RealTimeDrawingStartedEvent(
+                      drawingPoint: DrawingPoint(
+                        position: details.localPosition,
+                        paint: Paint()
+                          ..color = selectedColor
+                          ..isAntiAlias = true
+                          ..strokeWidth = 5.0
+                          ..strokeCap = StrokeCap.round,
+                      ),
+                    )),
+                    onPanUpdate: (details) =>
+                        drawingBloc.add(RealTimeDrawingUpdatedEvent(
+                      drawingPoint: DrawingPoint(
+                        position: details.localPosition,
+                        paint: Paint()
+                          ..color = selectedColor
+                          ..isAntiAlias = true
+                          ..strokeWidth = 5.0
+                          ..strokeCap = StrokeCap.round,
+                      ),
+                    )),
+                    onPanEnd: (details) =>
+                        drawingBloc.add(RealTimeDrawingStoppedEvent()),
+                    child: BlocSelector<RealTimeDrawingBloc,
+                        RealTimeDrawingState, List<DrawingPoint?>>(
+                      selector: (state) {
+                        return state.points;
+                      },
+                      builder: (context, points) {
+                        return CustomPaint(
+                          painter: _DrawingPainter(points),
+                          size: Size.infinite,
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+              _buildColorPalette(drawingBloc),
+            ],
           ),
-          _buildColorPalette(),
-        ],
-      ),
+        );
+      }),
     );
   }
 
-  Widget _buildColorPalette() {
+  Widget _buildColorPalette(RealTimeDrawingBloc drawingBloc) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
         padding: const EdgeInsets.all(10),
         color: Colors.white,
         child: SafeArea(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Colors.black,
-              Colors.red,
-              Colors.green,
-              Colors.blue,
-              Colors.yellow,
-              Colors.purple,
-              Colors.orange,
-            ]
-                .map(
-                  (color) => _ColorChoice(
-                    color: color,
-                    isSelected: color == _selectedColor,
-                    onSelect: _changeColor,
-                  ),
-                )
-                .toList(),
+          child: BlocSelector<RealTimeDrawingBloc, RealTimeDrawingState, Color>(
+            selector: (state) {
+              return state.selectedColor;
+            },
+            builder: (context, selectedColor) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Colors.black,
+                  Colors.red,
+                  Colors.green,
+                  Colors.blue,
+                  Colors.yellow,
+                  Colors.purple,
+                  Colors.orange,
+                ]
+                    .map(
+                      (color) => _ColorChoice(
+                        color: color,
+                        isSelected: color == selectedColor,
+                        onSelect: (color) => drawingBloc.add(
+                          ChangeSelectedColorEvent(color: color),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              );
+            },
           ),
         ),
       ),
@@ -199,4 +253,3 @@ class _DrawingPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _DrawingPainter oldDelegate) => true;
 }
-

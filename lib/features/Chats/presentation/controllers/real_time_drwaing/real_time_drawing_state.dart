@@ -6,7 +6,7 @@ enum RealTimeDrawingStatus { initial }
 class RealTimeDrawingState {
   final RealTimeDrawingStatus status;
   final List<DrawingPoint?> points;
-  final Color? selectedColor;
+  final Color selectedColor;
 
   const RealTimeDrawingState({
     this.status = RealTimeDrawingStatus.initial,

@@ -8,6 +8,7 @@ import 'package:ping/features/Chats/data/datasources/chats_remote_data_source.da
 import 'package:ping/features/Chats/data/repositories/chat_repo_implm.dart';
 import 'package:ping/features/Chats/data/repositories/chats_repo.dart';
 import 'package:ping/features/Chats/presentation/controllers/chat_room/chat_room_cubit.dart';
+import 'package:ping/features/Chats/presentation/controllers/real_time_drwaing/real_time_drawing_bloc.dart';
 import 'package:ping/features/home/presentation/controller/chat_cubit/chat_cubit.dart';
 import 'package:ping/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:ping/features/auth/data/datasources/auth_remote_data_source.dart';
@@ -29,6 +30,7 @@ void setupServiceLocator() {
       () => SearchUsersBloc(homeRepository: sl()));
   sl.registerFactory<ChatsCubit>(() => ChatsCubit(chatRepository: sl()));
   sl.registerFactory(() => ChatRoomCubit(chatRepository: sl()));
+  sl.registerFactory(() => RealTimeDrawingBloc());
 
   //REPOSITORIES
   sl.registerLazySingleton<AuthRepo>(() => AuthRepoImplem(
